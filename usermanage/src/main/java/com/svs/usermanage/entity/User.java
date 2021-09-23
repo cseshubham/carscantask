@@ -12,13 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.NullString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -34,26 +37,30 @@ public class User {
 	long id;
 	
 	@Column(name="f_name")
-	@Size(min = 2,message="First Name should have atleast 2 characters")
-	@NotBlank(message="First Name should Not Blank")
-	@Pattern(regexp="^[a-zA-Z]*$",message="First Name should have Only Alpha Char")
+	@Size(min = 2,max=15,message="First Name{fname} should have atleast 2 characters, max 15 char allow")
+	@NotBlank(message="First Name{fname} should Not Blank")
+	@Pattern(regexp="^[a-zA-Z]*$",message="First Name{fname} should have Only Alpha Char")
 	private String fName;
 	
 	@Column(name="l_name")
-	@Size(min = 2,message = "Last Name should have atleast 2 characters")
-	@NotBlank(message = "Last Name should not blank")
-	@Pattern(regexp="^[a-zA-Z]*$",message="Last Name should have Only Alpha Char")
+	@Size(min = 2,max=15,message = "Last Name{lname} should have atleast 2 characters,max 15 char allow")
+	@NotBlank(message = "Last Name{lname} should not blank")
+	@Pattern(regexp="^[a-zA-Z]*$",message="Last Name{lname} should have Only Alpha Char")
     private String lName;
 	
+	
 	@Column(name="dob")
-	@NotNull(message = "DOB should not be blank")
+	@PastOrPresent(message="Invalid DOB{dob}")
+	@NotNull(message = "DOB{dob} should not be blank")
 	@Temporal(TemporalType.DATE)
 	private Date dob;
 	
+	
+	
 	@Column(name="city")
-	@Size(min = 2,message = "City Name should have atleast 2 characters")
-	@NotBlank(message = "City Name should Not Blank")
-	@Pattern(regexp="^[a-zA-Z]*$",message="City Name should have Only Alpha Char")
+	@Size(min = 2,max=15,message = "City Name{city} should have atleast 2 characters,max 15 char allow")
+	@NotBlank(message = "City Name{city} should Not Blank")
+	@Pattern(regexp="^[a-zA-Z]*$",message="City Name{city} should have Only Alpha Char")
     private String city;
 	
 	@Column(name="mobile_number")
@@ -62,4 +69,5 @@ public class User {
 	@Pattern(regexp="^[0-9]*$",message="mobileNumber should have Only Numeric")
 	private String mobileNumber;
 	
+
 }

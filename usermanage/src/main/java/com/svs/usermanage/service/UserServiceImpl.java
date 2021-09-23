@@ -1,9 +1,12 @@
 package com.svs.usermanage.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.svs.usermanage.entity.User;
 import com.svs.usermanage.repository.UserRepository;
@@ -15,6 +18,7 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	
 	@Override
+	@Transactional
 	public User createUser(User user) {
 		
 		User newUser=userRepository.save(user);
@@ -31,22 +35,43 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public User updateUser(User user) {
 		// TODO Auto-generated method stub
+		User existUser=null;
+		try {
+			existUser=userRepository.findById(user.getId()).get();
+		} catch (NoSuchElementException e) {
+			// TODO: handle exception
+			throw new NoSuchElementException("Invalid User Id");
+		}
+		
 		User updateUser=userRepository.save(user);
+		
 		
 		return updateUser;
 	}
 
 	@Override
+	@Transactional
 	public void deleteUserById(long id) {
 		// TODO Auto-generated method stub
-		userRepository.deleteById(id);
+		try {
+			userRepository.deleteById(id);
+			
+		} catch (EmptyResultDataAccessException e) {
+			// TODO: handle exception
+			 throw new NoSuchElementException("Invalid User Id");
+		}
+		//return false;
 	}
 
 	@Override
 	public List<User> findAll() {
 		List<User> userList=userRepository.findAll();
+		if(userList.isEmpty()) {
+			throw new NoSuchElementException("No User Found");
+		}
 		return userList;
 	}
 	
