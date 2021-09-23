@@ -75,4 +75,5 @@ can call following Endpoints by using POSTMAN or Any Rest Client
 		  http://localhost:8080/userservice/user/<id>
 		```
 
-### Note - Replace '<id>' with actual id 
+### Note - Replace 
+	'<id>' with actual id 
